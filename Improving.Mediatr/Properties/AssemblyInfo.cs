@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Improving.MediatR")]
-[assembly: AssemblyDescription("MediatR integration")]
+[assembly: AssemblyDescription("A Castle Windsor Pipeline Implementation for MediatR")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyProduct("Improving.MediatR")]
 
@@ -17,7 +17,7 @@ using System.Runtime.InteropServices;
 [assembly: CLSCompliant(true)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("83fd6f5a-c807-471c-8b13-8d1fcf1355c8")]
+[assembly: Guid("8AA1158E-AEFD-40CC-9C15-BE00908E457A")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,6 +29,9 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion('1.0.*')]
-[assembly: AssemblyVersion("0.0.0.0")] //updated in TeamCity
-[assembly: AssemblyFileVersion("0.0.0.0")] //updated in TeamCity
-[assembly: AssemblyInformationalVersion("0.0.0.0")] //updated in TeamCity
+[assembly: AssemblyVersion("2.0.0.0")] //updated in TeamCity
+[assembly: AssemblyFileVersion("2.0.0.0")] //updated in TeamCity
+[assembly: AssemblyInformationalVersion("2.0.0.0")] //updated in TeamCity
+[assembly: AssemblyCompany("Improving Enterprises")]
+[assembly: AssemblyCopyright("2015")]
+
