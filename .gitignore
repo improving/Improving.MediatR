@@ -35,3 +35,4 @@ OADSI.exe.config
 *.orig
 *.log
 .vs
+*.nupkg
