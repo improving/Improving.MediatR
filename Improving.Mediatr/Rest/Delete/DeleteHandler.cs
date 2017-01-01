@@ -7,9 +7,8 @@
 
     public class DeleteHandler<TDelete, TResource>
         : RestHandler<DeleteRequest<TDelete, TResource>, DeleteResponse<TResource>, TDelete, TResource>
-        where TResource : class
     {
-        public async override Task<DeleteResponse<TResource>> Handle(
+        public override async Task<DeleteResponse<TResource>> Handle(
             DeleteRequest<TDelete, TResource> deleteRequest)
         {
             var httpRequest = deleteRequest.Resource as HttpRequestMessage;
@@ -41,7 +40,7 @@
                     Logger.Debug(log.ToString);
                 }
 
-                var resource = await ExtractResource(response);
+                var resource = await ExtractResource(deleteRequest, response);
                 return new DeleteResponse<TResource>(resource);
             }
         }

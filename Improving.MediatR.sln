@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Improving.MediatR", "Improv
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{4AECDAF6-ABC9-45B4-AC2B-868705AB45A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Improving.MediatR.Tests", "Improving.MediatR.Test\Improving.MediatR.Tests.csproj", "{53B9F3C6-BAD8-4350-AEE7-0B495788D1C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{2424F410-3D56-4B4E-B28F-8F7018D664D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2424F410-3D56-4B4E-B28F-8F7018D664D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2424F410-3D56-4B4E-B28F-8F7018D664D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53B9F3C6-BAD8-4350-AEE7-0B495788D1C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53B9F3C6-BAD8-4350-AEE7-0B495788D1C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53B9F3C6-BAD8-4350-AEE7-0B495788D1C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53B9F3C6-BAD8-4350-AEE7-0B495788D1C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

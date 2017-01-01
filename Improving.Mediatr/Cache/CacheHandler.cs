@@ -2,24 +2,18 @@
 {
     using System;
     using System.Collections.Concurrent;
-    using System.Linq;
     using System.Threading.Tasks;
-    using Castle.Core;
-    using Castle.MicroKernel;
-    using Castle.MicroKernel.Context;
-    using Castle.MicroKernel.Handlers;
     using global::MediatR;
 
     public class CacheHandler<TResponse>
         : IAsyncRequestHandler<Cached<TResponse>, TResponse>,
-          IRequireGenericMatching<CachedHandlerGenericCloser>
-        where TResponse : class
+          IRequireGenericMatching<HandlerGenericCloser>
     {
         private readonly IMediator _mediator;
 
         private static readonly 
-            ConcurrentDictionary<Request.WithResponse<TResponse>, CacheResponse> Cache
-            = new ConcurrentDictionary<Request.WithResponse<TResponse>, CacheResponse>();
+            ConcurrentDictionary<IAsyncRequest<TResponse>, CacheResponse> Cache
+            = new ConcurrentDictionary<IAsyncRequest<TResponse>, CacheResponse>();
 
         public CacheHandler(IMediator mediator)
         {
@@ -28,6 +22,17 @@
 
         public Task<TResponse> Handle(Cached<TResponse> request)
         {
+            if (request.Request == null)
+                return Task.FromResult(default(TResponse));
+
+            if (request.Invalidate)
+            {
+                CacheResponse cached;
+                return Cache.TryRemove(request.Request, out cached)
+                        ? cached.Response
+                        : Task.FromResult(default(TResponse));
+            }
+
             return Cache.AddOrUpdate(
                 request.Request,   // actual request
                 RefreshResponse,   // add first time
@@ -39,7 +44,7 @@
                 : cached).Response;
         }
 
-        private CacheResponse RefreshResponse(Request.WithResponse<TResponse> request)
+        private CacheResponse RefreshResponse(IAsyncRequest<TResponse> request)
         {
             return new CacheResponse
             {
@@ -48,51 +53,10 @@
             };
         }
 
-        struct CacheResponse
+        private struct CacheResponse
         {
             public Task<TResponse> Response;
             public DateTime        LastUpdated;
-        }
-    }
-
-    class CachedHandlerGenericCloser : IGenericImplementationMatchingStrategy
-    {
-        public Type[] GetGenericArguments(ComponentModel model, CreationContext context)
-        {
-            var requestArgs = context.RequestedType.GetGenericArguments()[0];
-            return requestArgs.GetGenericArguments();
-        }
-    }
-
-    internal class CacheHandlerFilter : IHandlersFilter
-    {
-        public bool HasOpinionAbout(Type service)
-        {
-            if (!service.IsGenericType)
-                return false;
-
-            var arguments = service.GetGenericArguments();
-            return (arguments.Length == 2 && arguments[0].IsGenericType
-                    && arguments[0].GetGenericTypeDefinition() == typeof (Cached<>));
-        }
-
-        public IHandler[] SelectHandlers(Type service, IHandler[] handlers)
-        {
-            var handler = handlers.Where(IsCachedHandler).FirstOrDefault();
-            return handler != null ? new[] { handler } : handlers;
-        }
-
-        private static bool IsCachedHandler(IHandler handler)
-        {
-            var type = handler.ComponentModel.Implementation;
-            while (type != null && type != typeof (object))
-            {
-                if (type.IsGenericType &&
-                    type.GetGenericTypeDefinition() == typeof (CacheHandler<>))
-                    return true;
-                type = type.BaseType;
-            }
-            return false;
         }
     }
 }

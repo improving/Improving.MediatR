@@ -1,40 +1,16 @@
-﻿namespace Improving.MediatR.Environment
+﻿using System;
+using Improving.MediatR.Environment;
+
+namespace Improving.MediatR
 {
-    public class Env<T>
-        where T : class
+    public static class Env
     {
-        public Env()
+        public static void Use<T>(T item)
         {
-        }
-
-        public Env(T value)
-        {
-            Value = value;
-        }
-
-        public T Value { get; }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(obj, this))
-                return true;
-            var other = obj as Env<T>;
-            return other != null && Equals(Value, other.Value);
-        }
-
-        public override int GetHashCode()
-        {
-            return Value?.GetHashCode() ?? 0;
-        }
-
-        public static implicit operator T (Env<T> env)
-        {
-            return env.Value;
-        }
-
-        public static implicit operator Env<T>(T value)
-        {
-            return new Env<T>(value);
+            var scope = EnvironmentScope.GetAmbientScope();
+            if (scope == null)
+                throw new InvalidOperationException("Use can only be called within an EnvironmentScope.");
+            scope.Add(item);
         }
     }
 }

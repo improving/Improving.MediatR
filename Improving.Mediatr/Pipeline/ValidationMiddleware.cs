@@ -24,7 +24,7 @@
             Array.Sort(_forResponse, RelativeOrderAttribute.Compare);
         }
 
-        public async override Task<TResponse> Apply(TRequest request, 
+        public override async Task<TResponse> Apply(TRequest request, 
             Func<TRequest, Task<TResponse>> next)
         {
             var failures = new List<ValidationFailure>();
@@ -37,7 +37,7 @@
             return response;
         }
 
-        private async static Task Validate<T>(
+        private static async Task Validate<T>(
             T item, IEnumerable<IValidator<T>> validators,
             List<ValidationFailure> failures)
         {

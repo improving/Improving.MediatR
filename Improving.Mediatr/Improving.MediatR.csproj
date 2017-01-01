@@ -49,31 +49,36 @@
       <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FluentValidation, Version=5.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentValidation.5.5.0.0\lib\Net40\FluentValidation.dll</HintPath>
+    <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MediatR, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MediatR.2.0.2\lib\net45\MediatR.dll</HintPath>
+    <Reference Include="MediatR, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SmartFormat, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SmartFormat.NET.1.5.0.0\lib\net40\SmartFormat.dll</HintPath>
+    <Reference Include="SmartFormat, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SmartFormat.NET.1.6.1.0\lib\net40\SmartFormat.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
@@ -90,26 +95,47 @@
     <Compile Include="Cache\CacheExtensions.cs" />
     <Compile Include="Cache\CacheHandler.cs" />
     <Compile Include="Cache\Cached.cs" />
+    <Compile Include="Concurrency\ConcurrencyHandler.cs" />
+    <Compile Include="Concurrency\ConcurrencyResult.cs" />
+    <Compile Include="Concurrency\Concurrent.cs" />
+    <Compile Include="Concurrency\Sequential.cs" />
     <Compile Include="DisposableAction.cs" />
+    <Compile Include="DTO.cs" />
+    <Compile Include="DynamicDispatch.cs" />
     <Compile Include="Environment\Env.cs" />
     <Compile Include="Environment\EnvironmentInterceptor.cs" />
     <Compile Include="Environment\EnvironmentExtensions.cs" />
     <Compile Include="Environment\EnvironmentResolver.cs" />
     <Compile Include="Environment\EnvironmentScope.cs" />
+    <Compile Include="HandlerGenericCloser.cs" />
+    <Compile Include="IKeyProperties.cs" />
+    <Compile Include="Inspect\RequestMetadata.cs" />
     <Compile Include="IRequireGenericMatching.cs" />
+    <Compile Include="Key.cs" />
+    <Compile Include="KeyExtensions.cs" />
+    <Compile Include="KeysResult.cs" />
+    <Compile Include="MeasurementConfigurationSection.cs" />
     <Compile Include="MediatorDecorator.cs" />
     <Compile Include="MediatRInstaller.cs" />
+    <Compile Include="NotificationDecorator.cs" />
+    <Compile Include="OpenGenericHandlersFilter.cs" />
     <Compile Include="Pipeline\LoggingMiddleware.cs" />
     <Compile Include="Pipeline\MediatorPipeline.cs" />
+    <Compile Include="Pipeline\PipelineContext.cs" />
     <Compile Include="Pipeline\Stage.cs" />
+    <Compile Include="Relationship.cs" />
     <Compile Include="RelativeOrderAttribute.cs" />
     <Compile Include="Pipeline\ValidationMiddleware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Request.cs" />
+    <Compile Include="RequestDecorator.cs" />
+    <Compile Include="Resource.cs" />
     <Compile Include="Rest\Delete\DeleteRequest.cs" />
     <Compile Include="Rest\Delete\DeleteHandler.cs" />
+    <Compile Include="Rest\HttpStatusCodeExtensions.cs" />
     <Compile Include="Rest\Put\PutHandler.cs" />
     <Compile Include="Rest\Put\PutRequest.cs" />
+    <Compile Include="Rest\RestFormatters.cs" />
     <Compile Include="Rest\RestHandler.cs" />
     <Compile Include="Rest\Post\PostHandler.cs" />
     <Compile Include="Rest\Post\PostRequest.cs" />
@@ -119,8 +145,18 @@
     <Compile Include="Rest\IResource.cs" />
     <Compile Include="Rest\RestRequest.cs" />
     <Compile Include="Rest\RestExtensions.cs" />
+    <Compile Include="Route\IRouter.cs" />
+    <Compile Include="Route\PassThroughRouter.cs" />
+    <Compile Include="Route\Routed.cs" />
+    <Compile Include="Route\RouteExtensions.cs" />
+    <Compile Include="Route\RouteHandler.cs" />
     <Compile Include="ScopedMediator.cs" />
     <Compile Include="ScopeExtensions.cs" />
+    <Compile Include="ServiceBus\Message.cs" />
+    <Compile Include="ServiceBus\ServiceBusExtensions.cs" />
+    <Compile Include="ServiceBus\ServiceBusMediator.cs" />
+    <Compile Include="ServiceBus\ServiceBusRouter.cs" />
+    <Compile Include="ServiceBus\ValidationFailureShim.cs" />
     <Compile Include="StopOnFailureAttribute.cs" />
     <Compile Include="WindsorValidatorFactory.cs" />
   </ItemGroup>

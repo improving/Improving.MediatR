@@ -13,8 +13,8 @@
             var envScope = EnvironmentScope.GetAmbientScope();
             if (envScope == null) return false;
 
-            var key      = dependency.DependencyKey;
-            var type     = dependency.TargetItemType;
+            var key  = dependency.DependencyKey;
+            var type = dependency.TargetItemType;
             return envScope.HasKey(key, type) || envScope.Contains(type);
         }
 
@@ -25,8 +25,8 @@
             var envScope = EnvironmentScope.GetAmbientScope();
             if (envScope == null) return false;
 
-            var key      = dependency.DependencyKey;
-            var type     = dependency.TargetItemType;
+            var key  = dependency.DependencyKey;
+            var type = dependency.TargetItemType;
             return envScope.GetKey(key, type) ?? envScope.Get(type);
         }
     }

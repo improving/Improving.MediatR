@@ -1,7 +1,6 @@
 ﻿namespace Improving.MediatR.Batch
 {
     using System.Collections.Generic;
-    using System.Text;
     using global::MediatR;
 
     /// <summary>
@@ -10,7 +9,7 @@
     /// <typeparam name="TPayload">The payload type</typeparam>
     /// <typeparam name="TResponse">The response type</typeparam>
     public class BatchOf<TPayload, TResponse> 
-        : Request.WithResponse<BatchResponse<TResponse>>
+        : DTO, Request.WithResponse<BatchResponse<TResponse>>
         where TPayload : Request.WithResponse<TResponse>
         where TResponse : class
     {
@@ -43,21 +42,13 @@
             _payloads.AddRange(payload);
             return _payloads.Count;
         }
-
-        public override string ToString()
-        {
-            var builder = new StringBuilder();
-            builder.AppendFormat("Batch of {0} {1}",
-                _payloads.Count, typeof(TPayload));
-            return builder.ToString();
-        }
     }
 
     /// <summary>
     /// Represents a batch of responses.
     /// </summary>
     /// <typeparam name="TResponse">The response type</typeparam>
-    public class BatchResponse<TResponse> : INotification, IAsyncNotification
+    public class BatchResponse<TResponse> : DTO, INotification, IAsyncNotification
         where TResponse : class
     {
         private TResponse[] _responses;
@@ -77,14 +68,6 @@
         {
             get{ return _responses ?? Empty; }
             set { _responses = value; }
-        }
-
-        public override string ToString()
-        {
-            var builder = new StringBuilder();
-            builder.AppendFormat("Batch response of {0} {1}",
-                Batch.Length, typeof(TResponse));
-            return builder.ToString();
         }
     }
 }

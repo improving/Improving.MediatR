@@ -7,9 +7,8 @@
 
     public class PostHandler<TPost, TResource>
         : RestHandler<PostRequest<TPost, TResource>, PostResponse<TResource>, TPost, TResource>
-        where TResource : class
     {
-        public async override Task<PostResponse<TResource>> Handle(
+        public override async Task<PostResponse<TResource>> Handle(
             PostRequest<TPost, TResource> postRequest)
         {
             var httpRequest = postRequest.Resource as HttpRequestMessage;
@@ -41,7 +40,7 @@
                     Logger.Debug(log.ToString);
                 }
 
-                var resource     = await ExtractResource(response);
+                var resource     = await ExtractResource(postRequest, response);
                 var postResponse = new PostResponse<TResource>(resource);
                 if (response.Headers.Location != null)
                     postResponse.ResourceUri = response.Headers.Location.AbsoluteUri;

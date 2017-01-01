@@ -1,10 +1,10 @@
-﻿using System.Threading;
-using MediatR;
-
-namespace Improving.MediatR
+﻿namespace Improving.MediatR
 {
     using System;
+    using System.Threading;
     using System.Threading.Tasks;
+
+    using global::MediatR;
 
     public class MediatorDecorator : IMediator
     {
@@ -13,14 +13,11 @@ namespace Improving.MediatR
         public MediatorDecorator(IMediator mediator)
         {
             if (mediator == null)
-                throw new ArgumentNullException("mediator");
+                throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
         }
 
-        protected IMediator Mediator
-        {
-            get { return _mediator; }
-        }
+        protected IMediator Mediator => _mediator;
 
         public virtual TResponse Send<TResponse>(IRequest<TResponse> request)
         {

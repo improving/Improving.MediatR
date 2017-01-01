@@ -4,55 +4,57 @@
     using System.IO;
     using System.Linq;
     using System.Net.Http;
-    using System.Net.Http.Formatting;
     using System.Threading.Tasks;
-    using Castle.Core;
     using Castle.Core.Logging;
     using Castle.MicroKernel;
-    using Castle.MicroKernel.Context;
-    using Castle.MicroKernel.Handlers;
     using global::MediatR;
 
     public abstract class RestHandler<TRestRequest, TRestResponse, TContent, TResource>
         : IAsyncRequestHandler<TRestRequest, TRestResponse>,
-          IRequireGenericMatching<RestHandlerGenericCloser>
+          IRequireGenericMatching<HandlerGenericCloser>
         where TRestRequest : RestRequest<TContent, TRestResponse>
-        where TResource : class
     {
-        protected RestHandler()
-        {
-            Logger = NullLogger.Instance;
-        }
-
         public Uri BaseAddress { get; set; }
 
         public IResourceUriBuilder<TContent> ResourceUriBuilder { get; set; }
 
-        public ILogger Logger { get; set; }
+        public ILogger Logger { get; set; } = NullLogger.Instance;
 
         public abstract Task<TRestResponse> Handle(TRestRequest message);
 
         protected virtual HttpContent GetContent(TRestRequest request)
         {
-            if (typeof(TContent) == typeof(string))
-                return new StringContent(request.Resource as string);
-            if (typeof(TResource) == typeof(Stream))
-                return new StreamContent(request.Resource as Stream);
-            return new ObjectContent<TContent>(request.Resource, new JsonMediaTypeFormatter());
+            var stringContent = request.Resource as string;
+            if (stringContent != null)
+                return new StringContent(stringContent);
+            var streamContent = request.Resource as Stream;
+            if (streamContent != null)
+                return new StreamContent(streamContent);
+            var bytes = request.Resource as byte[];
+            if (bytes != null)
+                return new ByteArrayContent(bytes);
+            var jsonFormatter = request.TypeNameHandling
+                              ? RestFormatters.JsonTyped
+                              : RestFormatters.Json;
+            return new ObjectContent<TContent>(request.Resource, jsonFormatter);
         }
 
-        protected async virtual Task<TResource> ExtractResource(HttpResponseMessage response)
+        protected virtual Task<TResource> ExtractResource(
+             RestRequest<TContent, TRestResponse> request, HttpResponseMessage response)
         {
-            if (typeof(TResource) == typeof(HttpResponseMessage))
-                return response as TResource;
+            if (typeof (TResource) == typeof (HttpResponseMessage))
+                return Task.FromResult(response) as Task<TResource>;
             response.EnsureSuccessStatusCode();
             if (typeof(TResource) == typeof(string))
-                return (await response.Content.ReadAsStringAsync()) as TResource;
-            if (typeof(TResource) == typeof(Stream))
-                return (await response.Content.ReadAsStreamAsync()) as TResource;
-            if (typeof(TResource) == typeof(byte[]))
-                return (await response.Content.ReadAsByteArrayAsync()) as TResource;
-            return await response.Content.ReadAsAsync<TResource>();
+                return response.Content.ReadAsStringAsync() as Task<TResource>;
+            if (typeof (TResource) == typeof (Stream))
+                return response.Content.ReadAsStreamAsync() as Task<TResource>;
+            if (typeof (TResource) == typeof (byte[]))
+                return response.Content.ReadAsByteArrayAsync() as Task<TResource>;
+            var jsonFormatter = request.TypeNameHandling
+                   ? RestFormatters.JsonTyped
+                   : RestFormatters.Json;
+            return response.Content.ReadAsAsync<TResource>(new [] { jsonFormatter });
         }
 
         protected string GetResourceUri(TRestRequest request)
@@ -76,18 +78,10 @@
     public abstract class RestHandler<TRestRequest, TRestResponse, TResource>
         : RestHandler<TRestRequest, TRestResponse, Unit, TResource>
         where TRestRequest : RestRequest<Unit, TRestResponse>
-        where TResource : class
     {
     }
 
-    class RestHandlerGenericCloser : IGenericImplementationMatchingStrategy
-    {
-        public Type[] GetGenericArguments(ComponentModel model, CreationContext context)
-        {
-            var requestArgs = context.RequestedType.GetGenericArguments()[0];
-            return requestArgs.GetGenericArguments();
-        }
-    }
+    #region RestHandlerFilter
 
     class RestHandlerFilter : IHandlersFilter
     {
@@ -105,13 +99,13 @@
         {
             var requestType = service.GetGenericArguments()[0];
             foreach (var handler in
-                from handler in handlers 
+                from handler in handlers
                 let  implementation = handler.ComponentModel.Implementation
-                let  baseType       = implementation.BaseType 
+                let  baseType       = implementation.BaseType
                 where baseType != null &&  baseType.IsGenericType &&
                      baseType.GetGenericTypeDefinition() == typeof (RestHandler<,,,>)
-                let implRequestType = baseType.GetGenericArguments()[0] 
-                where requestType.GetGenericTypeDefinition() == 
+                let implRequestType = baseType.GetGenericArguments()[0]
+                where requestType.GetGenericTypeDefinition() ==
                     implRequestType.GetGenericTypeDefinition() select handler)
             {
                 return new[] { handler };
@@ -119,4 +113,6 @@
             return handlers;
         }
     }
+
+    #endregion
 }

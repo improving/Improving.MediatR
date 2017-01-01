@@ -44,7 +44,9 @@
                 try
                 {
                     var value = resolver.Resolve(context, context.Handler, _componentModel, property.Dependency);
-                    if (value == null) continue;  
+                    if (value == null) continue;
+                    if (value == EnvironmentScope.Null)
+                        value = null;
                     try
                     {
                         var setMethod = property.Property.GetSetMethod();

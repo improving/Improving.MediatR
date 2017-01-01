@@ -24,7 +24,7 @@
 
         public static RelativeOrderAttribute Get(Type type)
         {
-            var attributes = type.GetCustomAttributes(typeof (RelativeOrderAttribute), false);
+            var attributes = type.GetCustomAttributes(typeof (RelativeOrderAttribute), true);
             return attributes.Length == 1 ? (RelativeOrderAttribute)attributes[0] : null;
         }
 

@@ -19,12 +19,16 @@
         private readonly InstanceIdentifier _instanceIdentifier;
         private readonly EnvironmentScope _parentScope;
         private readonly List<object> _items;
+        private readonly HashSet<Type> _clear;
         private readonly IDictionary<string, object> _keyValues;
         private bool _disposed;
+
+        public static readonly object Null = new object();
 
         public EnvironmentScope()
         {
             _items              = new List<object>();
+            _clear              = new HashSet<Type>();
             _keyValues          = new Dictionary<string, object>();
             _instanceIdentifier = new InstanceIdentifier();
              _parentScope       = GetAmbientScope();
@@ -34,11 +38,6 @@
         internal bool Implied { get; set; }
 
         #region Items
-
-        public TItem Get<TItem>() where TItem : class
-        {
-            return Get(typeof (TItem)) as TItem;
-        }
 
         public object Get(Type itemType)
         {
@@ -59,11 +58,15 @@
                 if (item == null && _parentScope != null)
                     item = _parentScope.Get(itemType);
             }
+            if (item == null && _clear.Any(itemType.IsAssignableFrom))
+                return Null;
             return item;
         }
 
         public bool Contains(Type itemType)
         {
+            if (_clear.Any(itemType.IsAssignableFrom))
+                return true;
             var elementType = itemType.GetCompatibleArrayItemType();
             if (elementType != null)
                 itemType = elementType;
@@ -72,11 +75,6 @@
                 itemType = itemType.GetGenericArguments()[0];
             return _items.Any(itemType.IsInstanceOfType) ||
                     ((_parentScope != null) && _parentScope.Contains(itemType));
-        }
-
-        public bool Contains<TItem>() where TItem : class
-        {
-            return Contains(typeof(TItem));
         }
 
         public EnvironmentScope Add(params object[] items)
@@ -99,6 +97,12 @@
                         _items.Insert(0, item);
                 }
             }
+            return this;
+        }
+
+        public EnvironmentScope Clear(params Type[] types)
+        {
+            types.ForEach(t => _clear.Add(t));
             return this;
         }
 
@@ -126,7 +130,8 @@
         public object GetKey(string key, Type type)
         {
             object value;
-            if (_keyValues.TryGetValue(key, out value) && type.IsInstanceOfType(value))
+            if (_keyValues.TryGetValue(key, out value) && 
+                (value == null || type.IsInstanceOfType(value)))
                 return value;
             return _parentScope?.GetKey(key, type);
         }
@@ -134,7 +139,8 @@
         public bool HasKey(string key, Type type)
         {
             object value;
-            if (_keyValues.TryGetValue(key, out value) && type.IsInstanceOfType(value))
+            if (_keyValues.TryGetValue(key, out value) && 
+                (value == null || type.IsInstanceOfType(value)))
                 return true;
             return _parentScope != null && _parentScope.HasKey(key, type);
         }

@@ -7,9 +7,8 @@
 
     public class PutHandler<TPut, TResource>
         : RestHandler<PutRequest<TPut, TResource>, PutResponse<TResource>, TPut, TResource>
-        where TResource : class
     {
-        public async override Task<PutResponse<TResource>> Handle(
+        public override async Task<PutResponse<TResource>> Handle(
             PutRequest<TPut, TResource> putRequest)
         {
             var httpRequest = putRequest.Resource as HttpRequestMessage;
@@ -41,7 +40,7 @@
                     Logger.Debug(log.ToString);
                 }
 
-                var resource    = await ExtractResource(response);
+                var resource    = await ExtractResource(putRequest, response);
                 var putResponse = new PutResponse<TResource>(resource);
                 if (response.Headers.Location != null)
                     putResponse.ResourceUri = response.Headers.Location.AbsoluteUri;

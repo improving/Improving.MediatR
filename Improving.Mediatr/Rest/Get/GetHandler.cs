@@ -7,9 +7,8 @@
 
     public class GetHandler<TGet, TResource>
         : RestHandler<GetRequest<TGet, TResource>, GetResponse<TResource>, TGet, TResource>
-        where TResource : class
     {
-        public async override Task<GetResponse<TResource>>
+        public override async Task<GetResponse<TResource>>
             Handle(GetRequest<TGet, TResource> getRequest) 
         {
             var httpRequest = getRequest.Resource as HttpRequestMessage;
@@ -41,7 +40,7 @@
                     Logger.Debug(log.ToString);
                 }
 
-                var resource = await ExtractResource(response);
+                var resource = await ExtractResource(getRequest, response);
                 return new GetResponse<TResource>(resource);
             }
         }

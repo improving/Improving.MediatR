@@ -2,6 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
+    using Castle.DynamicProxy;
     using global::MediatR;
 
     /// <summary>
@@ -42,6 +43,7 @@
             Array.Sort(_middleware, RelativeOrderAttribute.Compare);
         }
 
+
         public Task<TResponse> Handle(TRequest request)
         {
             var index = -1;
@@ -53,6 +55,9 @@
                      ? _middleware[index].Apply(request, next)
                      : _inner.Handle(request);
             };
+
+            Env.Use(new PipelineContext(ProxyUtil.GetUnproxiedType(_inner)));
+
             return next(request);
         }
     }
