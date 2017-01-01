@@ -129,13 +129,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Batch\BatchHandlerTests.cs" />
     <Compile Include="Cache\CacheHandlerTests.cs" />
     <Compile Include="Concurrency\SequentialTests.cs" />
     <Compile Include="Concurrency\ConcurrentTests.cs" />
     <Compile Include="DTOTests.cs" />
     <Compile Include="EnvironmentScopeTests.cs" />
-    <Compile Include="Properties\GlobalAssemblyInfo.cs" />
     <Compile Include="KeyTests.cs" />
     <Compile Include="MeasurementConfiguration\MeasurementConfigurationTest.cs" />
     <Compile Include="Ping.cs" />
