@@ -4,7 +4,7 @@
     <id>$id$</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>$author$</authors>
+    <authors>Craig Neuwirt, Michael Dudley</authors>
     <owners>$author$</owners>
     <projectUrl>https://github.com/improvingenterprises/Improving.MediatR</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
