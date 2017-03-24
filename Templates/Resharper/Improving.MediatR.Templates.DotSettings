@@ -2,6 +2,8 @@
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/@KeyIndexDefined">True</s:Boolean>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityPlural/@KeyIndexDefined">True</s:Boolean>
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityPlural/Order/@EntryValue">6</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=NameSpace/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=NameSpace/Order/@EntryValue">7</s:Int64>
 	
 	
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Shortcut/@EntryValue">mr</s:String>
@@ -417,7 +419,6 @@ namespace $nameSpace$&#xD;
     using System.Linq;&#xD;
     using System.Threading.Tasks;&#xD;
     using Rhino.Mocks;&#xD;
-    using Temp.Foos;&#xD;
 &#xD;
     [TestClass]&#xD;
     public class Get$entityPlural$Tests : TestScenario&#xD;
@@ -759,7 +760,7 @@ namespace $nameSpace$&#xD;
     }&#xD;
 }&#xD;
 &#xD;
-namespace Temp.Foos&#xD;
+namespace $NameSpace$&#xD;
 {&#xD;
     using System.Linq;&#xD;
     using System.Threading.Tasks;&#xD;
@@ -882,7 +883,7 @@ namespace Temp.Foos&#xD;
     }&#xD;
 }&#xD;
 &#xD;
-namespace Temp.Foos&#xD;
+namespace $NameSpace$&#xD;
 {&#xD;
     using System;&#xD;
     using System.Collections.Generic;&#xD;
