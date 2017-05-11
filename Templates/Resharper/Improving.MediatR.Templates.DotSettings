@@ -1,70 +1,31 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/@KeyIndexDefined">True</s:Boolean>
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityPlural/@KeyIndexDefined">True</s:Boolean>
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityPlural/Order/@EntryValue">6</s:Int64>
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=NameSpace/@KeyIndexDefined">True</s:Boolean>
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=NameSpace/Order/@EntryValue">7</s:Int64>
+	
+	
+	
+	
+	
 	
 	
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Shortcut/@EntryValue">mr</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Description/@EntryValue">Creates all the objects needed</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Text/@EntryValue">namespace $nameSpace$ &#xD;
 {&#xD;
-    using System;&#xD;
-    using Improving.Highway.Data.Scope;&#xD;
-    using Improving.Highway.Data.Scope.Concurrency;&#xD;
-&#xD;
-    public class Entity : IEntity, IRowVersioned&#xD;
-    {&#xD;
-        public int      Id         { get; set; }&#xD;
-        public byte[]   RowVersion { get; set; }&#xD;
-        public DateTime Created    { get; set; }&#xD;
-        public string   CreatedBy  { get; set; }&#xD;
-        public DateTime Modified   { get; set; }&#xD;
-        public string   ModifiedBy { get; set; }&#xD;
-    }&#xD;
-}&#xD;
-&#xD;
-namespace $nameSpace$&#xD;
-{&#xD;
-    using System.ComponentModel.DataAnnotations.Schema;&#xD;
-    using System.Data.Entity.ModelConfiguration;&#xD;
-&#xD;
-    public abstract class BaseMap&lt;T&gt; : EntityTypeConfiguration&lt;T&gt; where T: Entity&#xD;
-    {&#xD;
-        public const string DateTime2 = "DateTime2";&#xD;
-        protected BaseMap()&#xD;
-        {&#xD;
-            HasKey(x =&gt; x.Id);&#xD;
-            Property(x =&gt; x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);&#xD;
-            Property(x =&gt; x.CreatedBy).HasMaxLength(200);&#xD;
-            Property(x =&gt; x.ModifiedBy).HasMaxLength(200);&#xD;
-            Property(x =&gt; x.Created).HasColumnType(DateTime2);&#xD;
-            Property(x =&gt; x.Modified).HasColumnType(DateTime2);&#xD;
-            Property(x =&gt; x.RowVersion).HasColumnType("ROWVERSION");&#xD;
-        }&#xD;
-    }&#xD;
-}&#xD;
-&#xD;
-namespace $nameSpace$ &#xD;
-{&#xD;
-    using Improving.Highway.Data.Scope;&#xD;
-    using Improving.Highway.Data.Scope.Concurrency;&#xD;
     using Improving.MediatR;&#xD;
 &#xD;
-    public class $Entity$ : Entity, IKeyProperties&lt;int&gt;, IEntity, IRowVersioned&#xD;
+    public class $Entity$ : Entity, IKeyProperties&lt;int&gt;&#xD;
     {&#xD;
-        public string Text { get; set; }&#xD;
-        public string Name { get; set; }&#xD;
+        public string Name        { get; set; }&#xD;
+        public string Description { get; set; }&#xD;
     }&#xD;
 }&#xD;
 &#xD;
 namespace $nameSpace$&#xD;
 {&#xD;
 &#xD;
-    public class $Entity$Map : BaseMap&lt;$Entity$&gt;&#xD;
+    public class $Entity$EntityTypeConfiguration : BaseEntityTypeConfiguration&lt;$Entity$&gt;&#xD;
     {&#xD;
-        public $Entity$Map()&#xD;
+        public $Entity$EntityTypeConfiguration ()&#xD;
         {&#xD;
             ToTable(nameof($Entity$));&#xD;
         }&#xD;
@@ -75,13 +36,13 @@ namespace $nameSpace$ &#xD;
 {&#xD;
     using Improving.MediatR;&#xD;
 &#xD;
-    public class $Entity$Data : Resource&lt;int&gt;&#xD;
+    public class $Entity$Data : Resource&lt;int?&gt;&#xD;
     {&#xD;
-        public string Text { get; set; }&#xD;
-        public string Name { get; set; }&#xD;
+        public string Name        { get; set; }&#xD;
+        public string Description { get; set; }&#xD;
     }&#xD;
 }&#xD;
-	&#xD;
+    &#xD;
 namespace $nameSpace$ &#xD;
 {&#xD;
     public class $Entity$Result&#xD;
@@ -100,7 +61,7 @@ namespace $nameSpace$ &#xD;
     using Improving.MediatR.Pipeline;&#xD;
     using MediatR;&#xD;
 &#xD;
-	[RelativeOrder(Stage.Validation - 1)]&#xD;
+    [RelativeOrder(Stage.Validation - 1)]&#xD;
     public class $Entity$AggregateHandler :&#xD;
         IAsyncRequestHandler&lt;Create$Entity$, $Entity$Data&gt;,&#xD;
         IAsyncRequestHandler&lt;Get$EntityPlural$, $Entity$Result&gt;,&#xD;
@@ -110,70 +71,70 @@ namespace $nameSpace$ &#xD;
         IRequestMiddleware&lt;Remove$Entity$, $Entity$Data&gt;&#xD;
     {&#xD;
         private readonly IRepository&lt;$DataDomain$&gt; _repository;&#xD;
-        private readonly DateTime _now;&#xD;
 &#xD;
-		public $Entity$ $Entity$ { get; set; }&#xD;
+        public $Entity$ $Entity$ { get; set; }&#xD;
 &#xD;
         public $Entity$AggregateHandler(IRepository&lt;$DataDomain$&gt; repository)&#xD;
         {&#xD;
             _repository = repository;&#xD;
-            _now        = DateTime.Now;&#xD;
         }&#xD;
 &#xD;
-		#region Create $Entity$&#xD;
+        #region Create $Entity$&#xD;
 &#xD;
         public async Task&lt;$Entity$Data&gt; Handle(Create$Entity$ message)&#xD;
         {&#xD;
-			using(var scope = _repository.Scopes.Create())&#xD;
-			{&#xD;
-				var $entityLowercase$ = Map(new $Entity$(), message.Resource);&#xD;
-				$entityLowercase$.Created = _now;&#xD;
+            using(var scope = _repository.Scopes.Create())&#xD;
+            {&#xD;
+                var $entityLowercase$ = new $Entity$().Map(message.Resource);&#xD;
+                $entityLowercase$.Created = DateTime.Now;&#xD;
 &#xD;
-				_repository.Context.Add($entityLowercase$);&#xD;
+                _repository.Context.Add($entityLowercase$);&#xD;
 &#xD;
-				var data = new $Entity$Data();&#xD;
+                var data = new $Entity$Data();&#xD;
 &#xD;
-				await scope.SaveChangesAsync((dbScope, count) =&gt;&#xD;
-				{&#xD;
-					data.Id = $entityLowercase$.Id;&#xD;
-					data.RowVersion = $entityLowercase$.RowVersion;&#xD;
-				});&#xD;
+                await scope.SaveChangesAsync((dbScope, count) =&gt;&#xD;
+                {&#xD;
+                    data.Id = $entityLowercase$.Id;&#xD;
+                    data.RowVersion = $entityLowercase$.RowVersion;&#xD;
+                });&#xD;
 &#xD;
-				return data;&#xD;
-			}&#xD;
+                return data;&#xD;
+            }&#xD;
         }&#xD;
 &#xD;
-		#endregion&#xD;
+        #endregion&#xD;
 &#xD;
-		#region Get $Entity$&#xD;
+        #region Get $Entity$&#xD;
 &#xD;
         public async Task&lt;$Entity$Result&gt; Handle(Get$EntityPlural$ message)&#xD;
         {&#xD;
             using(_repository.Scopes.CreateReadOnly())&#xD;
-			{&#xD;
-				var $entityPluralLowercase$ = (await _repository.FindAsync(new Get$EntityPlural$ById(message.Ids){&#xD;
-					KeyProperties = message.KeyProperties&#xD;
-				})).Select(x =&gt; Map(new $Entity$Data(), x)).ToArray();&#xD;
+            {&#xD;
+                var $entityPluralLowercase$ = (await _repository.FindAsync(new Get$EntityPlural$ById(message.Ids){&#xD;
+                    KeyProperties = message.KeyProperties&#xD;
+                })).Select(x =&gt; new $Entity$Data().Map(x)).ToArray();&#xD;
 &#xD;
-				return new $Entity$Result&#xD;
-				{&#xD;
-					$EntityPlural$ = $entityPluralLowercase$&#xD;
-				};&#xD;
-			}&#xD;
+                return new $Entity$Result&#xD;
+                {&#xD;
+                    $EntityPlural$ = $entityPluralLowercase$&#xD;
+                };&#xD;
+            }&#xD;
         }&#xD;
 &#xD;
-		#endregion&#xD;
+        #endregion&#xD;
 &#xD;
-		#region Update $Entity$&#xD;
+        #region Update $Entity$&#xD;
 &#xD;
         public async Task&lt;$Entity$Data&gt; Apply(Update$Entity$ request, Func&lt;Update$Entity$, Task&lt;$Entity$Data&gt;&gt; next)&#xD;
         {&#xD;
             using (var scope = _repository.Scopes.Create())&#xD;
             {&#xD;
-                var data = request.Resource;&#xD;
-                if ($Entity$ == null &amp;&amp; data != null)&#xD;
+                var resource = request.Resource;&#xD;
+                if (resource != null &amp;&amp; ($Entity$ == null || $Entity$?.Id != resource.Id))&#xD;
                 {&#xD;
-                    $Entity$ = await _repository.FetchByIdAsync&lt;$Entity$&gt;(data.Id);&#xD;
+                    $Entity$ = (await _repository&#xD;
+                        .FindAsync(new Get$EntityPlural$ById(resource.Id)))&#xD;
+                        .FirstOrDefault();&#xD;
                     Env.Use($Entity$);&#xD;
                 }&#xD;
 &#xD;
@@ -187,7 +148,7 @@ namespace $nameSpace$ &#xD;
 &#xD;
         public Task&lt;$Entity$Data&gt; Handle(Update$Entity$ request)&#xD;
         {&#xD;
-            Map($Entity$, request.Resource);&#xD;
+            $Entity$.Map(request.Resource);&#xD;
 &#xD;
             return Task.FromResult(new $Entity$Data&#xD;
             {&#xD;
@@ -195,9 +156,9 @@ namespace $nameSpace$ &#xD;
             });&#xD;
         }&#xD;
 &#xD;
-		#endregion&#xD;
+        #endregion&#xD;
 &#xD;
-		#region Remove $Entity$&#xD;
+        #region Remove $Entity$&#xD;
 &#xD;
         public async Task&lt;$Entity$Data&gt; Apply(&#xD;
             Remove$Entity$ request, Func&lt;Remove$Entity$, Task&lt;$Entity$Data&gt;&gt; next)&#xD;
@@ -205,9 +166,11 @@ namespace $nameSpace$ &#xD;
             using (var scope = _repository.Scopes.Create())&#xD;
             {&#xD;
                 var resource = request.Resource;&#xD;
-                if ($Entity$ == null &amp;&amp; resource != null)&#xD;
+                if (resource != null &amp;&amp; ($Entity$ == null || $Entity$?.Id != resource.Id))&#xD;
                 {&#xD;
-                    $Entity$ = await _repository.FetchByIdAsync&lt;$Entity$&gt;(resource.Id);&#xD;
+                    $Entity$ = (await _repository&#xD;
+                        .FindAsync(new Get$EntityPlural$ById(resource.Id)))&#xD;
+                        .FirstOrDefault();&#xD;
                     Env.Use($Entity$);&#xD;
                 }&#xD;
 &#xD;
@@ -228,45 +191,87 @@ namespace $nameSpace$ &#xD;
             });&#xD;
         }&#xD;
 &#xD;
-		#endregion&#xD;
+        #endregion&#xD;
 &#xD;
+    }&#xD;
 &#xD;
-		#region Mapping&#xD;
-&#xD;
-        public $Entity$ Map($Entity$ $entityLowercase$, $Entity$Data data)&#xD;
+    public static class $Entity$DataExtensions&#xD;
+    {&#xD;
+        public static $Entity$Data Map(this $Entity$Data data, $Entity$ $entityLowercase$)&#xD;
         {&#xD;
-            if (data.Name != null)&#xD;
-                $entityLowercase$.Name = data.Name;&#xD;
-				&#xD;
-            if (data.Text != null)&#xD;
-                $entityLowercase$.Text = data.Text;&#xD;
+            ResourceMapper.Map(data, $entityLowercase$);&#xD;
 &#xD;
-            if (data.CreatedBy != null)&#xD;
-                $entityLowercase$.CreatedBy = data.CreatedBy;&#xD;
-&#xD;
-            if (data.ModifiedBy != null)&#xD;
-                $entityLowercase$.ModifiedBy = data.ModifiedBy;&#xD;
-&#xD;
-            $entityLowercase$.Modified = _now;&#xD;
-&#xD;
-            return $entityLowercase$;&#xD;
-        }&#xD;
-&#xD;
-        public $Entity$Data Map($Entity$Data data, $Entity$ $entityLowercase$)&#xD;
-        {&#xD;
-			data.Id         = $entityLowercase$.Id;&#xD;
-			data.Name       = $entityLowercase$.Name;&#xD;
-			data.Text       = $entityLowercase$.Text;&#xD;
-			data.RowVersion = $entityLowercase$.RowVersion;&#xD;
-			data.CreatedBy  = $entityLowercase$.CreatedBy;&#xD;
-			data.Created    = $entityLowercase$.Created;&#xD;
-			data.ModifiedBy = $entityLowercase$.ModifiedBy;&#xD;
-			data.Modified   = $entityLowercase$.Modified;&#xD;
+            data.Name        = $entityLowercase$.Name;&#xD;
+            data.Description = $entityLowercase$.Description;&#xD;
 &#xD;
             return data;&#xD;
         }&#xD;
+    }&#xD;
+    &#xD;
+    public static class $Entity$Extensions&#xD;
+    {&#xD;
+        public static $Entity$ Map(this $Entity$ $entityLowercase$, $Entity$Data data)&#xD;
+        {&#xD;
+            EntityMapper.Map($entityLowercase$, data);&#xD;
 &#xD;
-		#endregion&#xD;
+            if (data.Name != null)&#xD;
+                $entityLowercase$.Name = data.Name;&#xD;
+                &#xD;
+            if (data.Description != null)&#xD;
+                $entityLowercase$.Description = data.Description;&#xD;
+&#xD;
+            return $entityLowercase$;&#xD;
+        }&#xD;
+    }&#xD;
+}&#xD;
+&#xD;
+namespace $nameSpace$&#xD;
+{&#xD;
+    using FizzWare.NBuilder;&#xD;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;&#xD;
+&#xD;
+    [TestClass]&#xD;
+    public class $Entity$MappingTests : TestScenario&#xD;
+    {&#xD;
+        [TestMethod]&#xD;
+        public void ShouldMapResourcesToEntities()&#xD;
+        {&#xD;
+            var resource = Builder&lt;$Entity$Data&gt;.CreateNew()&#xD;
+                .With(c =&gt; c.RowVersion = new byte[] { 0x01 })&#xD;
+                .Build();&#xD;
+            var entity = new $Entity$().Map(resource);&#xD;
+&#xD;
+            AssertResourcesMapToEntities(entity, resource);&#xD;
+&#xD;
+            Assert.AreEqual(resource.Name, entity.Name);&#xD;
+            Assert.AreEqual(resource.Description, entity.Description);&#xD;
+        }&#xD;
+&#xD;
+        [TestMethod]&#xD;
+        public void ShouldMapDefaultResourcesToEntitiesWithNoErrors()&#xD;
+        {&#xD;
+            new $Entity$().Map(new $Entity$Data());&#xD;
+        }&#xD;
+&#xD;
+        [TestMethod]&#xD;
+        public void ShouldMapEntitiesToResources()&#xD;
+        {&#xD;
+            var entity = Builder&lt;$Entity$&gt;.CreateNew()&#xD;
+                .With(c =&gt; c.RowVersion = new byte[] { 0x01 })&#xD;
+                .Build();&#xD;
+            var resource = new $Entity$Data().Map(entity);&#xD;
+&#xD;
+            AssertEntitiesMapToResources(resource, entity);&#xD;
+&#xD;
+            Assert.AreEqual(entity.Name,        resource.Name);&#xD;
+            Assert.AreEqual(entity.Description, resource.Description);&#xD;
+        }&#xD;
+&#xD;
+        [TestMethod]&#xD;
+        public void ShouldMapDefaultEntitiesToResourcesWithNoErrors()&#xD;
+        {&#xD;
+            new $Entity$Data().Map(new $Entity$());&#xD;
+        }&#xD;
     }&#xD;
 }&#xD;
 &#xD;
@@ -274,7 +279,7 @@ namespace $nameSpace$ &#xD;
 {&#xD;
     using Improving.MediatR;&#xD;
 &#xD;
-    public class Create$Entity$ : ResourceAction&lt;$Entity$Data, int&gt;&#xD;
+    public class Create$Entity$ : ResourceAction&lt;$Entity$Data, int?&gt;&#xD;
     {&#xD;
         public Create$Entity$()&#xD;
         {&#xD;
@@ -310,7 +315,7 @@ namespace $nameSpace$&#xD;
                       var entity = ($Entity$)inv.Arguments[0];&#xD;
                       entity.Id         = 1;&#xD;
                       entity.RowVersion = new byte[] { 0x01 };&#xD;
-                      Assert.AreEqual($entityLowercase$.Text, entity.Text);&#xD;
+                      Assert.AreEqual($entityLowercase$.Name, entity.Name);&#xD;
                       inv.ReturnValue = entity;&#xD;
                   }).Return(null);&#xD;
 &#xD;
@@ -343,7 +348,7 @@ namespace $nameSpace$ &#xD;
         {&#xD;
             public $Entity$DataIntegrity()&#xD;
             {&#xD;
-                RuleFor(x =&gt; x.Text)&#xD;
+                RuleFor(x =&gt; x.Name)&#xD;
                     .NotEmpty();&#xD;
             }&#xD;
         }&#xD;
@@ -367,7 +372,7 @@ namespace $nameSpace$ &#xD;
             {&#xD;
                  Resource = new $Entity$Data&#xD;
                  {&#xD;
-                    Text = "my text"&#xD;
+                    Name = "a"&#xD;
                  }&#xD;
             };&#xD;
 &#xD;
@@ -382,9 +387,9 @@ namespace $nameSpace$ &#xD;
         }&#xD;
 &#xD;
         [TestMethod]&#xD;
-        public void MustHaveText()&#xD;
+        public void MustHaveName()&#xD;
         {&#xD;
-            create$Entity$.Resource.Text = string.Empty;&#xD;
+            create$Entity$.Resource.Name = string.Empty;&#xD;
             var result = validator.Validate(create$Entity$);&#xD;
             Assert.IsFalse(result.IsValid);&#xD;
         }&#xD;
@@ -409,7 +414,7 @@ namespace $nameSpace$ &#xD;
 &#xD;
         public int[] Ids { get; set;}&#xD;
 &#xD;
-		public bool KeyProperties { get; set; }&#xD;
+        public bool KeyProperties { get; set; }&#xD;
     }&#xD;
 }&#xD;
 &#xD;
@@ -421,7 +426,7 @@ namespace $nameSpace$&#xD;
     using Rhino.Mocks;&#xD;
 &#xD;
     [TestClass]&#xD;
-    public class Get$entityPlural$Tests : TestScenario&#xD;
+    public class Get$EntityPlural$Tests : TestScenario&#xD;
     {&#xD;
         [TestMethod]&#xD;
         public async Task ShouldGet$EntityPlural$()&#xD;
@@ -455,10 +460,16 @@ namespace $nameSpace$ &#xD;
     using System.Linq;&#xD;
     using System.Data.Entity;&#xD;
     using Highway.Data;&#xD;
-	&#xD;
+    &#xD;
     public class Get$EntityPlural$ById : Query&lt;$Entity$&gt;&#xD;
     {&#xD;
-		public bool KeyProperties { get; set; }&#xD;
+        public bool KeyProperties { get; set; }&#xD;
+&#xD;
+        public Get$EntityPlural$ById(int? id)&#xD;
+            :this(new []{ id ?? 0 })&#xD;
+        {&#xD;
+        }&#xD;
+&#xD;
 &#xD;
         public Get$EntityPlural$ById(int[] ids)&#xD;
         {&#xD;
@@ -475,11 +486,11 @@ namespace $nameSpace$ &#xD;
                 {&#xD;
                     query = query.Where(x =&gt; ids.Contains(x.Id));&#xD;
                 }&#xD;
-				&#xD;
-			    if (KeyProperties)&#xD;
-			    {&#xD;
-				    return query.Select(x =&gt; new $Entity${Id = x.Id, Name = x.Name});&#xD;
-			    }&#xD;
+                &#xD;
+                if (KeyProperties)&#xD;
+                {&#xD;
+                    return query.Select(x =&gt; new $Entity${Id = x.Id, Name = x.Name});&#xD;
+                }&#xD;
 &#xD;
                 return query;&#xD;
             };&#xD;
@@ -491,7 +502,7 @@ namespace $nameSpace$&#xD;
 {&#xD;
     using Improving.MediatR;&#xD;
 &#xD;
-    public class Update$Entity$ : UpdateResource&lt;$Entity$Data, int&gt;&#xD;
+    public class Update$Entity$ : UpdateResource&lt;$Entity$Data, int?&gt;&#xD;
     {&#xD;
         public Update$Entity$()&#xD;
         {&#xD;
@@ -521,7 +532,7 @@ namespace $nameSpace$&#xD;
             var $entityLowercase$= new $Entity$()&#xD;
             {&#xD;
                 Id         = 1,&#xD;
-                Name       = "ABC",&#xD;
+                Name       = "a",&#xD;
                 RowVersion = new byte[] { 0x01 }&#xD;
             };&#xD;
 &#xD;
@@ -564,7 +575,9 @@ namespace $nameSpace$ &#xD;
         {&#xD;
             public $Entity$DataIntegrity()&#xD;
             {&#xD;
-                RuleFor(x =&gt; x.Text)&#xD;
+                RuleFor(x =&gt; x.Id)&#xD;
+                    .NotNull();&#xD;
+                RuleFor(x =&gt; x.Name)&#xD;
                     .NotEmpty();&#xD;
             }&#xD;
         }&#xD;
@@ -588,7 +601,8 @@ namespace $nameSpace$ &#xD;
             {&#xD;
                  Resource = new $Entity$Data&#xD;
                  {&#xD;
-                    Text = "my text"&#xD;
+                    Id   = 1,&#xD;
+                    Name = "a"&#xD;
                  }&#xD;
             };&#xD;
 &#xD;
@@ -603,9 +617,9 @@ namespace $nameSpace$ &#xD;
         }&#xD;
 &#xD;
         [TestMethod]&#xD;
-        public void MustHaveText()&#xD;
+        public void MustHaveName()&#xD;
         {&#xD;
-            update$Entity$.Resource.Text = string.Empty;&#xD;
+            update$Entity$.Resource.Name = string.Empty;&#xD;
             var result = validator.Validate(update$Entity$);&#xD;
             Assert.IsFalse(result.IsValid);&#xD;
         }&#xD;
@@ -616,7 +630,7 @@ namespace $nameSpace$ &#xD;
 {&#xD;
     using Improving.MediatR;&#xD;
 &#xD;
-    public class Remove$Entity$ : UpdateResource&lt;$Entity$Data, int&gt;&#xD;
+    public class Remove$Entity$ : UpdateResource&lt;$Entity$Data, int?&gt;&#xD;
     {&#xD;
         public Remove$Entity$()&#xD;
         {&#xD;
@@ -648,7 +662,7 @@ namespace $nameSpace$&#xD;
             var entity = new $Entity$&#xD;
             {&#xD;
                 Id         = 1,&#xD;
-                Text       = "ABC",&#xD;
+                Name       = "a",&#xD;
                 RowVersion = new byte[] { 0x01 }&#xD;
             };&#xD;
 &#xD;
@@ -724,7 +738,7 @@ namespace $nameSpace$&#xD;
 &#xD;
             try&#xD;
             {&#xD;
-                AssertNoValidationErrors&lt;$Entity$Concurency, UpdateResource&lt;$Entity$Data, int&gt;&gt;(request);&#xD;
+                AssertNoValidationErrors&lt;$Entity$Concurency, UpdateResource&lt;$Entity$Data, int?&gt;&gt;(request);&#xD;
                 Assert.Fail("Should have thrown OptimisticConcurrencyException");&#xD;
             }&#xD;
             catch (OptimisticConcurrencyException ex)&#xD;
@@ -748,7 +762,7 @@ namespace $nameSpace$&#xD;
 &#xD;
             try&#xD;
             {&#xD;
-                AssertNoValidationErrors&lt;$Entity$Concurency, UpdateResource&lt;$Entity$Data, int&gt;&gt;(request);&#xD;
+                AssertNoValidationErrors&lt;$Entity$Concurency, UpdateResource&lt;$Entity$Data, int?&gt;&gt;(request);&#xD;
                 Assert.Fail("Should have thrown OptimisticConcurrencyException");&#xD;
             }&#xD;
             catch (OptimisticConcurrencyException ex)&#xD;
@@ -756,6 +770,133 @@ namespace $nameSpace$&#xD;
                 Assert.AreEqual(ex.Message,&#xD;
                     $"Concurrency exception detected for {typeof($Entity$).FullName} with id 1.");&#xD;
             }&#xD;
+        }&#xD;
+    }&#xD;
+}&#xD;
+</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=Entity/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=Entity/Order/@EntryValue">1</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=EntityPlural/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=EntityPlural/Order/@EntryValue">2</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=DataDomain/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=DataDomain/Order/@EntryValue">3</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityLowercase/@KeyIndexDefined">True</s:Boolean>
+	
+	
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityLowercase/Order/@EntryValue">4</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityPluralLowercase/@KeyIndexDefined">True</s:Boolean>
+	
+	
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityPluralLowercase/Order/@EntryValue">5</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=nameSpace/@KeyIndexDefined">True</s:Boolean>
+	
+	
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=nameSpace/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Field/=DataDomain/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Field/=DataDomain/Order/@EntryValue">3</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Field/=Entity/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Field/=Entity/Order/@EntryValue">1</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Field/=EntityPlural/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Field/=EntityPlural/Order/@EntryValue">2</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Field/=nameSpace/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Field/=NameSpace/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Field/=nameSpace/Order/@EntryValue">0</s:Int64>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Field/=NameSpace/Order/@EntryValue">4</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Shortcut/@EntryValue">mri</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=C360FBDAEC0FF448A6D4AB81412AB452/Text/@EntryValue">namespace $nameSpace$ &#xD;
+{&#xD;
+    using System;&#xD;
+    using Improving.Highway.Data.Scope;&#xD;
+    using Improving.Highway.Data.Scope.Concurrency;&#xD;
+&#xD;
+    public class Entity : IEntity, IRowVersioned&#xD;
+    {&#xD;
+        public int      Id         { get; set; }&#xD;
+        public byte[]   RowVersion { get; set; }&#xD;
+        public DateTime Created    { get; set; }&#xD;
+        public string   CreatedBy  { get; set; }&#xD;
+        public DateTime Modified   { get; set; }&#xD;
+        public string   ModifiedBy { get; set; }&#xD;
+    }&#xD;
+}&#xD;
+&#xD;
+namespace $nameSpace$&#xD;
+{&#xD;
+    using System.ComponentModel.DataAnnotations.Schema;&#xD;
+    using System.Data.Entity.ModelConfiguration;&#xD;
+&#xD;
+    public abstract class BaseMap&lt;T&gt; : EntityTypeConfiguration&lt;T&gt; where T: Entity&#xD;
+    {&#xD;
+        public const string DateTime2 = "DateTime2";&#xD;
+        protected BaseMap()&#xD;
+        {&#xD;
+            HasKey(x =&gt; x.Id);&#xD;
+            Property(x =&gt; x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);&#xD;
+            Property(x =&gt; x.CreatedBy).HasMaxLength(200);&#xD;
+            Property(x =&gt; x.ModifiedBy).HasMaxLength(200);&#xD;
+            Property(x =&gt; x.Created).HasColumnType(DateTime2);&#xD;
+            Property(x =&gt; x.Modified).HasColumnType(DateTime2);&#xD;
+            Property(x =&gt; x.RowVersion).HasColumnType("ROWVERSION");&#xD;
+        }&#xD;
+    }&#xD;
+}&#xD;
+&#xD;
+namespace $NameSpace$&#xD;
+{&#xD;
+    using System;&#xD;
+    using Improving.MediatR;&#xD;
+&#xD;
+    public class EntityMapper&#xD;
+    {&#xD;
+        public static Entity Map(Entity entity, Resource&lt;int?&gt; resource)&#xD;
+        {&#xD;
+            if (resource.Id.HasValue)&#xD;
+                entity.Id = resource.Id.Value;&#xD;
+&#xD;
+            if (resource.RowVersion != null)&#xD;
+                entity.RowVersion = resource.RowVersion;&#xD;
+&#xD;
+            if (resource.CreatedBy != null)&#xD;
+                entity.CreatedBy = resource.CreatedBy;&#xD;
+&#xD;
+            if (resource.ModifiedBy != null)&#xD;
+                entity.ModifiedBy = resource.ModifiedBy;&#xD;
+&#xD;
+            entity.Modified = DateTime.Now;&#xD;
+&#xD;
+            return entity;&#xD;
+        }&#xD;
+    }&#xD;
+}&#xD;
+&#xD;
+namespace $NameSpace$&#xD;
+{&#xD;
+    using Improving.MediatR;&#xD;
+&#xD;
+    public class ResourceMapper&#xD;
+    {&#xD;
+        public static Resource&lt;int?&gt; Map(Resource&lt;int?&gt; resource, Entity entity)&#xD;
+        {&#xD;
+            resource.Id         = entity.Id;&#xD;
+            resource.RowVersion = entity.RowVersion;&#xD;
+            resource.CreatedBy  = entity.CreatedBy;&#xD;
+            resource.Created    = entity.Created;&#xD;
+            resource.ModifiedBy = entity.ModifiedBy;&#xD;
+            resource.Modified   = entity.Modified;&#xD;
+&#xD;
+            return resource;&#xD;
         }&#xD;
     }&#xD;
 }&#xD;
@@ -878,6 +1019,25 @@ namespace $NameSpace$&#xD;
                 return mediatR.ResolveAll&lt;IValidator&lt;R&gt;&gt;()&#xD;
                     .First(v =&gt; ProxyUtil.GetUnproxiedType(v).IsAssignableFrom(typeof(T)));&#xD;
             }&#xD;
+        }&#xD;
+&#xD;
+        protected void AssertResourcesMapToEntities(Entity entity, Resource&lt;int?&gt; resource)&#xD;
+        {&#xD;
+            Assert.AreEqual(resource.Id,         entity.Id);&#xD;
+            Assert.AreEqual(resource.RowVersion, entity.RowVersion);&#xD;
+            Assert.AreEqual(resource.ModifiedBy, entity.ModifiedBy);&#xD;
+&#xD;
+            Assert.IsTrue(resource.Modified &lt; entity.Modified);&#xD;
+        }&#xD;
+&#xD;
+        protected void AssertEntitiesMapToResources(Resource&lt;int?&gt; resource, Entity entity)&#xD;
+        {&#xD;
+            Assert.AreEqual(entity.Id,         resource.Id);&#xD;
+            Assert.AreEqual(entity.RowVersion, resource.RowVersion);&#xD;
+            Assert.AreEqual(entity.Created,    resource.Created);&#xD;
+            Assert.AreEqual(entity.CreatedBy,  resource.CreatedBy);&#xD;
+            Assert.AreEqual(entity.Modified,   resource.Modified);&#xD;
+            Assert.AreEqual(entity.ModifiedBy, resource.ModifiedBy);&#xD;
         }&#xD;
 &#xD;
     }&#xD;
@@ -1022,27 +1182,4 @@ namespace $NameSpace$&#xD;
 &#xD;
 	#endregion&#xD;
 }&#xD;
-</s:String>
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
-	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=Entity/@KeyIndexDefined">True</s:Boolean>
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=Entity/Order/@EntryValue">0</s:Int64>
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=EntityPlural/@KeyIndexDefined">True</s:Boolean>
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=EntityPlural/Order/@EntryValue">1</s:Int64>
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=DataDomain/@KeyIndexDefined">True</s:Boolean>
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=DataDomain/Order/@EntryValue">4</s:Int64>
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityLowercase/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityLowercase/Expression/@EntryValue">decapitalize(Entity)</s:String>
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityLowercase/InitialRange/@EntryValue">-1</s:Int64>
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityLowercase/Order/@EntryValue">2</s:Int64>
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityPluralLowercase/@KeyIndexDefined">True</s:Boolean>
-	
-	
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=entityPluralLowercase/Order/@EntryValue">5</s:Int64>
-	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=nameSpace/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=nameSpace/Expression/@EntryValue">fileDefaultNamespace()</s:String>
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=nameSpace/InitialRange/@EntryValue">-1</s:Int64>
-	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=7670B05F6256254DBDB7764E090E93A1/Field/=nameSpace/Order/@EntryValue">3</s:Int64></wpf:ResourceDictionary>
+</s:String></wpf:ResourceDictionary>
