@@ -43,7 +43,8 @@
 
         private Task<object> Process(object request)
         {
-            return DynamicDispatch.Dispatch(_mediator, request);
+            using (_mediator.NewScope())
+                return DynamicDispatch.Dispatch(_mediator, request);
         }
     }
 }
