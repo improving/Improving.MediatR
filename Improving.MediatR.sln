@@ -1,16 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Improving.MediatR", "Improving.Mediatr\Improving.MediatR.csproj", "{2424F410-3D56-4B4E-B28F-8F7018D664D9}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{4AECDAF6-ABC9-45B4-AC2B-868705AB45A9}"
 	ProjectSection(SolutionItems) = preProject
 		GlobalAssemblyInfo.cs = GlobalAssemblyInfo.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Improving.MediatR.Tests", "Improving.MediatR.Test\Improving.MediatR.Tests.csproj", "{53B9F3C6-BAD8-4350-AEE7-0B495788D1C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Improving.MediatR", "Source\Improving.Mediatr\Improving.MediatR.csproj", "{2424F410-3D56-4B4E-B28F-8F7018D664D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Improving.MediatR.Tests", "Test\Improving.MediatR.Test\Improving.MediatR.Tests.csproj", "{53B9F3C6-BAD8-4350-AEE7-0B495788D1C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
